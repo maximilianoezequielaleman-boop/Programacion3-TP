@@ -1,5 +1,4 @@
-﻿
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Programacion3.API.Services;
 
 namespace Programacion3.API.Controllers
@@ -22,5 +21,19 @@ namespace Programacion3.API.Controllers
 
             return Ok(productos);
         }
+
+        [HttpGet("{id}")]
+        public IActionResult ObtenerProductoPorId(int id)
+        {
+            var producto = _productoService.ObtenerPorId(id);
+
+            if (producto == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(producto);
+        }
+
     }
 }
