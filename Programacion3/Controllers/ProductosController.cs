@@ -14,26 +14,44 @@ namespace Programacion3.API.Controllers
             _productoService = productoService;
         }
 
+     
+
         [HttpGet]
         public IActionResult ObtenerProductos()
         {
-            var productos = _productoService.ObtenerTodos();
-
-            return Ok(productos);
+            try
+            {
+                var productos = _productoService.ObtenerTodos();
+                return Ok(productos);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Ocurrió un error interno al consultar los productos.");
+            }
         }
+
+
 
         [HttpGet("{id}")]
         public IActionResult ObtenerProductoPorId(int id)
         {
-            var producto = _productoService.ObtenerPorId(id);
-
-            if (producto == null)
+            try
             {
-                return NotFound();
-            }
+                var producto = _productoService.ObtenerPorId(id);
 
-            return Ok(producto);
+                if (producto == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(producto);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Ocurrió un error interno al buscar el producto.");
+            }
         }
+
 
     }
 }

@@ -18,34 +18,42 @@ namespace Programacion3.API.Data
         }
 
 
+
         public List<Producto> ObtenerTodos()
         {
             List<Producto> productos = new List<Producto>();
 
-            using (SqlConnection conexion = new SqlConnection(_connectionString))
+            try
             {
-                conexion.Open();
-
-                string consulta = "SELECT Id, Nombre, Precio, Stock FROM Productos";
-
-                using (SqlCommand comando = new SqlCommand(consulta, conexion))
+                using (SqlConnection conexion = new SqlConnection(_connectionString))
                 {
-                    using (SqlDataReader lector = comando.ExecuteReader())
-                    {
-                        while (lector.Read())
-                        {
-                            Producto producto = new Producto
-                            {
-                                Id = Convert.ToInt32(lector["Id"]),
-                                Nombre = lector["Nombre"].ToString() ?? "",
-                                Precio = Convert.ToDecimal(lector["Precio"]),
-                                Stock = Convert.ToInt32(lector["Stock"])
-                            };
+                    conexion.Open();
 
-                            productos.Add(producto);
+                    string consulta = "SELECT Id, Nombre, Precio, Stock FROM Productos";
+
+                    using (SqlCommand comando = new SqlCommand(consulta, conexion))
+                    {
+                        using (SqlDataReader lector = comando.ExecuteReader())
+                        {
+                            while (lector.Read())
+                            {
+                                Producto producto = new Producto
+                                {
+                                    Id = Convert.ToInt32(lector["Id"]),
+                                    Nombre = lector["Nombre"].ToString() ?? "",
+                                    Precio = Convert.ToDecimal(lector["Precio"]),
+                                    Stock = Convert.ToInt32(lector["Stock"])
+                                };
+
+                                productos.Add(producto);
+                            }
                         }
                     }
                 }
+            }
+            catch (SqlException ex)
+            {
+                throw new Exception("Ocurrió un error al consultar los productos.", ex);
             }
 
             return productos;
@@ -53,36 +61,46 @@ namespace Programacion3.API.Data
 
 
 
+
+
         public Producto? ObtenerPorId(int id)
         {
-            using (SqlConnection conexion = new SqlConnection(_connectionString))
+            try
             {
-                conexion.Open();
-
-                string consulta = "SELECT Id, Nombre, Precio, Stock FROM Productos WHERE Id = @Id";
-
-                using (SqlCommand comando = new SqlCommand(consulta, conexion))
+                using (SqlConnection conexion = new SqlConnection(_connectionString))
                 {
-                    comando.Parameters.AddWithValue("@Id", id);
+                    conexion.Open();
 
-                    using (SqlDataReader lector = comando.ExecuteReader())
+                    string consulta = "SELECT Id, Nombre, Precio, Stock FROM Productos WHERE Id = @Id";
+
+                    using (SqlCommand comando = new SqlCommand(consulta, conexion))
                     {
-                        if (lector.Read())
+                        comando.Parameters.AddWithValue("@Id", id);
+
+                        using (SqlDataReader lector = comando.ExecuteReader())
                         {
-                            return new Producto
+                            if (lector.Read())
                             {
-                                Id = Convert.ToInt32(lector["Id"]),
-                                Nombre = lector["Nombre"].ToString() ?? "",
-                                Precio = Convert.ToDecimal(lector["Precio"]),
-                                Stock = Convert.ToInt32(lector["Stock"])
-                            };
+                                return new Producto
+                                {
+                                    Id = Convert.ToInt32(lector["Id"]),
+                                    Nombre = lector["Nombre"].ToString() ?? "",
+                                    Precio = Convert.ToDecimal(lector["Precio"]),
+                                    Stock = Convert.ToInt32(lector["Stock"])
+                                };
+                            }
                         }
                     }
                 }
             }
+            catch (SqlException ex)
+            {
+                throw new Exception("Ocurrió un error al buscar el producto.", ex);
+            }
 
             return null;
         }
+
 
     }
 }
