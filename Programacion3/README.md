@@ -31,6 +31,16 @@ La aplicación utiliza una cadena de conexión llamada ConexionSQL.
 
 Las credenciales de acceso a SQL Server deben configurarse localmente mediante User Secrets de .NET. No deben publicarse en GitHub.
 
+### Configuración de la conexión
+
+1. Abrir el proyecto en Visual Studio 2022.
+2. Hacer clic derecho sobre el proyecto Programacion3.
+3. Seleccionar "Administrar secretos de usuario".
+4. Configurar la cadena de conexión ConexionSQL con los datos del servidor SQL Server que se utilizará.
+5. Verificar que la base de datos Programacion3 y la tabla Productos existan. Si se utiliza una instalación nueva, ejecutar los scripts de la carpeta ScriptsSQL en el orden indicado por sus nombres.
+6. No publicar usuarios ni contraseñas en GitHub.
+
+
 ## Ejecución
 1. Abrir el proyecto en Visual Studio 2022.
 2. Configurar la conexión a SQL Server.
